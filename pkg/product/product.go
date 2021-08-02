@@ -1,6 +1,8 @@
 package product
 
-import "time"
+import (
+	"time"
+)
 
 //Modelo de producto
 type Model struct {
@@ -18,9 +20,25 @@ type Models []*Model
 //La interfaz storage es como mi archivo crud.go en el CRUD anterior. Me permite ejecutar las funciones para crear, borrar, actualizar y leer.
 type Storage interface {
 	//Create recibe como parametro un Modelo de Producto/Invoice/InvoiceHeader para crear uno de estos. Devuelve un error en caso de que exista
-	Create(*Model) error
+	Migrate() error
+	/* Create(*Model) error
 	Update(*Model) error
 	GetAll() (Models, error)
 	GetById(uint) (*Model, error)
-	Delete(uint) error
+	Delete(uint) error */
+}
+
+//Servicio de producto
+type Service struct {
+	storage Storage
+}
+
+//Retorna un puntero de Service
+func NewService(s Storage) *Service {
+	return &Service{}
+}
+
+//Migrate se usa para migrar producto. Es decir, crear la tabla producto.
+func (s *Service) Migrate() error {
+	return s.storage.Migrate()
 }

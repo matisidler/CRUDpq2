@@ -40,3 +40,5 @@ func NewPostgresDB() {
 func ObtenerDB() *sql.DB {
 	return db
 }
+
+//Ahora si en main.go intento ejecutar varias veces la función NewPostgresDB, voy a ver como solamente se va a ejecutar el println una sola vez.

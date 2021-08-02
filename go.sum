@@ -1,4 +1,2 @@
 github.com/lib/pq v1.10.2 h1:AqzbZs4ZoCBp+GtejcpCpcxM3zlSMx29dXbUSeVtJb8=
 github.com/lib/pq v1.10.2/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
-github.com/matisidler/CRUDpqv2 v0.0.0-20210802170210-19295307beed h1:JWMWxuPZz7c9B2CysNh8LGQ+pf88qkJttZG6MnQiAsM=
-github.com/matisidler/CRUDpqv2 v0.0.0-20210802170210-19295307beed/go.mod h1:PBEmwoRCwue91IN8xjDo6Vy8LWrOeItHgxWoOck5E5k=
