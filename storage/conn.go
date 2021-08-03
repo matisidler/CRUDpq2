@@ -1,3 +1,5 @@
+//ACÁ NOS CONECTAMOS A LA BD
+
 package storage
 
 import (
@@ -19,7 +21,7 @@ var (
 	once sync.Once
 )
 
-func NewPostgresDB() {
+func NewPostgresDB() *sql.DB {
 	once.Do(func() {
 		var err error
 		db, err = sql.Open("postgres", "postgres://postgres:password@localhost:5432/gocrud?sslmode=disable")
@@ -33,12 +35,16 @@ func NewPostgresDB() {
 		}
 		fmt.Println("Conectado a postgres.")
 	})
-}
-
-//Tenemos que crear una función que nos devuelva la variable DB. Esto es asi porque con el patrón Singleton se debe hacer esto
-//Para que los demás paquetes puedan usar la variable db.
-func ObtenerDB() *sql.DB {
 	return db
 }
 
-//Ahora si en main.go intento ejecutar varias veces la función NewPostgresDB, voy a ver como solamente se va a ejecutar el println una sola vez.
+func stringToNull(s string) sql.NullString {
+	var nullString sql.NullString
+	if s == "" {
+		nullString.Valid = false
+	} else {
+		nullString.Valid = true
+		nullString.String = s
+	}
+	return nullString
+}

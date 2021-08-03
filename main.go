@@ -1,19 +1,24 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/matisidler/CRUDpqv2/pkg/product"
 	"github.com/matisidler/CRUDpqv2/storage"
 )
 
 func main() {
-	storage.NewPostgresDB()
-
-	storageProduct := storage.NewPsqlProduct(storage.ObtenerDB())
-	serviceProduct := product.NewService(storageProduct)
-	err := serviceProduct.Migrate()
+	db := storage.NewPostgresDB()
+	productStorage := storage.NewPsqlProduct(db)
+	productService := product.NewService(productStorage)
+	err := productService.Delete(9)
 	if err != nil {
-		log.Fatalf("produc.Migrate: %v", err)
+		fmt.Println(err)
 	}
+
+	cs, err := productService.GetAll()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(cs)
 }
