@@ -48,3 +48,7 @@ func stringToNull(s string) sql.NullString {
 	}
 	return nullString
 }
+
+func Pool() *sql.DB {
+	return db
+}

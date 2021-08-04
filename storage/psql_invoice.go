@@ -38,6 +38,7 @@ func (p *PsqlInvoice) Create(m *invoice.Model) error {
 		tx.Rollback()
 		return fmt.Errorf("Item: %v", err)
 	}
+	fmt.Println("Creado con exito.")
 
 	return tx.Commit()
 

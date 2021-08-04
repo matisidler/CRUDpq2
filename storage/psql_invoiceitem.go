@@ -19,12 +19,11 @@ const (
 		created_at TIMESTAMP NOT NULL DEFAULT now(),
 		updated_at TIMESTAMP,
 		CONSTRAINT invoice_items_id_pk PRIMARY KEY (id),
-		CONSTRAINT invoice_items_invoice_header_id_fk FOREIGN KEY (invoice_header_id) REFERENCES invoice_headers (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-		CONSTRAINT invoice_items_product_id_fk FOREIGN KEY (product_id) REFERENCES products (id) ON UPDATE RESTRICT ON DELETE RESTRICT) `
+		CONSTRAINT invoice_items_product_id_fk FOREIGN KEY (product_id) REFERENCES products (id))`
 	psqlCreateInvoiceItem = `INSERT INTO invoice_items(invoice_header_id, product_id) VALUES ($1, $2) RETURNING id, created_at`
 )
 
-//PsqlInvoiceItem nos genera la variable db para interactuar con la base de datos.
+//PsqlInvoiceItem nos genera la variable db para interactuar con la base de datos. CONSTRAINT invoice_items_invoice_header_id_fk FOREIGN KEY (invoice_header_id) REFERENCES invoice_headers (id),
 type PsqlInvoiceItem struct {
 	db *sql.DB
 }
@@ -51,12 +50,12 @@ func (p *PsqlInvoiceItem) Migrate() error {
 	return nil
 }
 
-func (p *PsqlInvoiceItem) CreateTx(tx *sql.Tx, headerID uint, models []invoiceitem.Model) error {
+func (p *PsqlInvoiceItem) CreateTx(tx *sql.Tx, headerID uint, models []*invoiceitem.Model) error {
 	stmt, err := p.db.Prepare(psqlCreateInvoiceItem)
 	if err != nil {
 		return err
 	}
-	stmt.Close()
+	defer stmt.Close()
 
 	for _, item := range models {
 		err = stmt.QueryRow(headerID, item.ProductID).Scan(&item.ID, &item.CreatedAt)
