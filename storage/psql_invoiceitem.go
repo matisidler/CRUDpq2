@@ -19,6 +19,7 @@ const (
 		created_at TIMESTAMP NOT NULL DEFAULT now(),
 		updated_at TIMESTAMP,
 		CONSTRAINT invoice_items_id_pk PRIMARY KEY (id),
+		CONSTRAINT invoice_items_invoiceheaderid_fk FOREIGN KEY (invoice_header_id) REFERENCES invoice_headers (id),
 		CONSTRAINT invoice_items_product_id_fk FOREIGN KEY (product_id) REFERENCES products (id))`
 	psqlCreateInvoiceItem = `INSERT INTO invoice_items(invoice_header_id, product_id) VALUES ($1, $2) RETURNING id, created_at`
 )
@@ -51,7 +52,7 @@ func (p *PsqlInvoiceItem) Migrate() error {
 }
 
 func (p *PsqlInvoiceItem) CreateTx(tx *sql.Tx, headerID uint, models []*invoiceitem.Model) error {
-	stmt, err := p.db.Prepare(psqlCreateInvoiceItem)
+	stmt, err := tx.Prepare(psqlCreateInvoiceItem)
 	if err != nil {
 		return err
 	}

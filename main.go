@@ -31,18 +31,18 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	/* db := storage.NewPostgresDB()
-	storageItem := storage.PsqlNewInvoiceItem(db)
-	storageHeader := storage.PsqlNewInvoiceHeader(db)
-	err := storageHeader.Migrate()
-	if err != nil {
-		fmt.Println(err)
-	}
-	err = storageItem.Migrate()
-	if err != nil {
-		fmt.Println(err)
-	} */
-
+	/* 	db := storage.NewPostgresDB()
+	   	storageItem := storage.PsqlNewInvoiceItem(db)
+	   	storageHeader := storage.PsqlNewInvoiceHeader(db)
+	   	err := storageHeader.Migrate()
+	   	if err != nil {
+	   		fmt.Println(err)
+	   	}
+	   	err = storageItem.Migrate()
+	   	if err != nil {
+	   		fmt.Println(err)
+	   	}
+	*/
 }
 
 //Lo que quiere el programa es que en vez de pasarle un storage.PsqlInvoiceItem, le pase un invoiceitem.Storage
