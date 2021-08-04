@@ -5,6 +5,8 @@ package storage
 import (
 	"database/sql"
 	"fmt"
+
+	"github.com/matisidler/CRUDpqv2/pkg/invoiceitem"
 )
 
 //Creamos una constante (como mi variable "q") para ejecutar las querys.
@@ -19,6 +21,7 @@ const (
 		CONSTRAINT invoice_items_id_pk PRIMARY KEY (id),
 		CONSTRAINT invoice_items_invoice_header_id_fk FOREIGN KEY (invoice_header_id) REFERENCES invoice_headers (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
 		CONSTRAINT invoice_items_product_id_fk FOREIGN KEY (product_id) REFERENCES products (id) ON UPDATE RESTRICT ON DELETE RESTRICT) `
+	psqlCreateInvoiceItem = `INSERT INTO invoice_items(invoice_header_id, product_id) VALUES ($1, $2) RETURNING id, created_at`
 )
 
 //PsqlInvoiceItem nos genera la variable db para interactuar con la base de datos.
@@ -45,5 +48,21 @@ func (p *PsqlInvoiceItem) Migrate() error {
 	}
 
 	fmt.Println("Migración de Invoice Item ejecutada correctamente")
+	return nil
+}
+
+func (p *PsqlInvoiceItem) CreateTx(tx *sql.Tx, headerID uint, models []invoiceitem.Model) error {
+	stmt, err := p.db.Prepare(psqlCreateInvoiceItem)
+	if err != nil {
+		return err
+	}
+	stmt.Close()
+
+	for _, item := range models {
+		err = stmt.QueryRow(headerID, item.ProductID).Scan(&item.ID, &item.CreatedAt)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
